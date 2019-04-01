@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VueCliMiddleware;
+using WebApp.Vue.Hubs;
 
 namespace WebApp.Vue
 {
@@ -47,7 +48,7 @@ namespace WebApp.Vue
 
             app.UseSignalR(conf =>
             {
-                // TODO: We need some mapping here..
+                conf.MapHub<ChatHub>("/chat");
             });
 
             app.UseMvc(routes =>

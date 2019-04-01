@@ -31,19 +31,22 @@ export default {
   // This is called whever the app gets mounted in the DOM
   // (AKA a nice place to place init logic :))
   async mounted() {
-    // TODO: Build a hub
-    // TODO: Register event handler
-    // TODO: Start the hub
+    this.hub = new signalR.HubConnectionBuilder()
+      .withUrl(`/chat`)
+      .build();
+    
+    this.hub.on('ReceiveMessage', (message) => this.messages.unshift(message));
+    await this.hub.start();
   },
   // This is called whenever this component is removed from the DOM
   // (AKA a nice place to destroy stuff you don't want :))
   async beforeDestroy() {
-    // TODO: Stop the hub
+    await this.hub.stop();
   },
   methods: {
     async sendMessage(e) {
-      // TODO: We need to send a message to the hub
-      // TODO: We need to clear the text input after
+      await this.hub.invoke('SendMessage', e.target.value);
+      e.target.value = '';
     },
   },
 };
